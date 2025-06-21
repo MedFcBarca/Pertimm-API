@@ -62,6 +62,33 @@ function authMiddleware(req, res, next) {
   next();
 }
 
+// Create application :
+app.post('/api/v1.1/job-application-request/', authMiddleware, (req, res) => {
+  const { email, first_name, last_name } = req.body;
+  if (!email || !first_name || !last_name) {
+    return res.status(400).json({ error: 'Champs manquants' })
+  }
+  const id = generateId();
+  applications[id] = {
+    email,
+    first_name,
+    last_name,
+    status: 'PENDING',
+    confirmation_url: null,
+  }
+
+  //Simuler le changement de statut en COMPLETED apres 5 secondes
+  setTimeout(() => {
+    applications[id].status = 'COMPLETED';
+    applications[id].confirmation_url = `/api/v1.1/job-application-confirm/${id}`;
+  }, 5000);
+
+  res.json({
+    url: `/api/v1.1/job-application-status/${id}`
+  });
+});
+
+
 // Démarrer serveur
 app.listen(PORT, () => {
   console.log(`Mock Pertimm API server running on http://localhost:${PORT}`);
