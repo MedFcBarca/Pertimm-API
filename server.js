@@ -40,6 +40,28 @@ app.post('/api/v1.1/register/', (req, res) => {
   res.status(201).json({ message: 'Inscription réussie' });
 })
 
+// Login
+app.post('/api/v1.1/login/', (req, res) => {
+  const { email, password } = req.body;
+  const user = users.find(u => u.email === email && u.password === password);
+  if (!user) return res.status(401).json({ error: 'Identifiants invalides' });
+  const token = generateToken(email);
+  tokens[token] = email;
+  res.json({ token });
+});
+
+// Middleware auth ! ! !
+function authMiddleware(req, res, next) {
+  const auth = req.headers['authorization'];
+  if (!auth || !auth.startsWith('Token ')) {
+    return res.status(401).json({ error: 'Token manquant' });
+  }
+  const token = auth.split(' ')[1];
+  if (!tokens[token]) return res.status(401).json({ error: 'Token invalide' });
+  req.userEmail = tokens[token];
+  next();
+}
+
 // Démarrer serveur
 app.listen(PORT, () => {
   console.log(`Mock Pertimm API server running on http://localhost:${PORT}`);
