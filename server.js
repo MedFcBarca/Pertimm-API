@@ -88,6 +88,22 @@ app.post('/api/v1.1/job-application-request/', authMiddleware, (req, res) => {
   });
 });
 
+// Confirmer la candidature :
+app.patch('/api/v1.1/job-application-confirm/:id', authMiddleware, (req, res) => {
+  const id = req.params.id;
+  const appData = applications[id];
+  if (!appData) return res.status(404).json({ error: 'Application non trouvée' });
+
+  // je dois vérifier le champ confirmed
+  if (req.body.confirmed !== true) {
+    return res.status(400).json({ error: 'Confirmation doit être true' });
+  }
+
+  // Ici on accepte toujours (pas de timeout strict)
+  res.json({ message: 'Confirmation réussie' });
+});
+
+
 
 // Démarrer serveur
 app.listen(PORT, () => {
