@@ -1,0 +1,34 @@
+# Script d'automatisation pour le test technique Pertimm Hire-Game API
+
+Ce script Node.js automatise les étapes du test technique proposé par Pertimm pour le recrutement.  
+Il interagit avec l'API officielle `https://hire-game.pertimm.dev` pour :
+
+- S'inscrire (`register`)
+- Se connecter (`login`) et récupérer un token d'authentification
+- Créer une candidature (`job-application-request`)
+- Vérifier périodiquement le statut de la candidature jusqu'à ce qu’elle soit `COMPLETED`
+- Confirmer la candidature (`confirmation`) (30 secondes)!
+
+---
+
+## Prérequis
+
+- Node.js installé 
+- Connexion internet :D
+- Module `axios` (installé via `npm install axios`)
+
+---
+
+## Configuration
+
+Modifier les variables dans le fichier `Pertimm.js` :
+
+## NB
+
+Ne pas prendre en compte le fichier local.js c'est juste quelques tests en local pour postman
+
+```js
+const email = 'med_abbad@outlook.fr';
+const password = 'MotDePasseFort123!';
+const first_name = 'Mohamed';
+const last_name = 'Abbad';
